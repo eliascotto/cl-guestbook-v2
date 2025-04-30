@@ -1,0 +1,83 @@
+{% extends "layouts/default.html" %}
+{% block title %}Guestbook{% endblock %}
+{% block content %}
+
+<!-- Navbar -->
+<nav class="navbar is-primary" role="navigation">
+  <div class="container">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="/">
+        <strong>Guestbook</strong>
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- Main Content -->
+<section class="section">
+  <div class="container guestbook-container">
+    <h1 class="title has-text-centered mb-6">Welcome to my Guestbook</h1>
+
+    <!-- Messages List -->
+    <div class="box message-box">
+        {% if messages %}
+            {% for message in messages %}
+                <article class="media">
+                    <div class="media-content">
+                        <div class="content">
+                        <div class="message-meta">
+                            <strong>{{ message.username }}</strong>
+                            <small class="has-text-grey">{{ message.created-at }}</small>
+                        </div>
+                        <p>{{ message.content }}</p>
+                        <form action="/message/delete/{{ message.id }}" method="post" class="delete-form">
+                            <input type="hidden" name="id" value="{{ message.id }}">
+                            <button type="submit" class="button is-danger is-small">
+                              <span>Delete</span>
+                            </button>
+                        </form>
+                        </div>
+                    </div>
+                </article>
+                {% if not loop.last %}
+                    <hr class="my-4">
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            <div class="has-text-centered has-text-grey">
+                <p>No messages yet. Be the first to leave one!</p>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Message Form -->
+    <div class="box">
+      <h2 class="title is-4 has-text-centered mb-4">Leave a Message</h2>
+      <form method="post" action="/message">
+        <div class="field">
+          <label class="label">Name</label>
+          <div class="control">
+            <input class="input" type="text" name="name" placeholder="Your name" required>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Message</label>
+          <div class="control">
+            <textarea class="textarea" name="message" placeholder="Write your message here..." required></textarea>
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="control has-text-centered">
+            <button class="button is-primary is-medium">
+              <span>Submit Message</span>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
